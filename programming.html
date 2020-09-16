@@ -1,14 +1,88 @@
-<!doctype html>  
+<!doctype html>
+
+<head>
+    <meta charset="utf-8">
+    <title>FALL</title>
+</head>
+
+
 <body>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="game">
+        <div id="character"></div>
+    </div>
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
+    <style>
+        canvas {
+            display: block;
+            margin: auto;
+        }
+
+    </style>
     <script>
         var canvas, canvasContext;
 
         window.onload = function() {
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
-            
+
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
+
             setInterval(mainloop, 1000 / 50);
         }
+
+
+
+        // player vars
+        var playerXpos = 0;
+        var playerYpos = 0;
+        var playersize = 20;
+        var playerXspeed = 10;
+
+        const LEFT_KEY = 37;
+        const RIGHT_KEY = 39;
+        var leftKeyPressed = false;
+        var rightKeyPressed = false;
+
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black');
+            colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
+
+            playerMove();
+        }
+
+        function keyPressed(evt) {
+
+            if (evt.keyCode == LEFT_KEY) { 
+                leftKeyPressed = true;  
+            }
+            if (evt.keyCode == RIGHT_KEY) { 
+                rightKeyPressed = true;  
+            }
+
+        }
+        
+        function keyReleased(evt) {
+
+            if (evt.keyCode == LEFT_KEY) { 
+                leftKeyPressed = false;  
+            }
+            if (evt.keyCode == RIGHT_KEY) { 
+                rightKeyPressed = false;  
+            }
+
+        }
+
+
+        function playerMove() {
+            playerXpos += 5;
+            playerXspeed += 5;
+        }
+
+        function colorRect(x, y, w, h, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
+        }
+
     </script>
 </body>
