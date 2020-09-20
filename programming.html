@@ -38,6 +38,12 @@
         var playerYpos = 0;
         var playersize = 20;
         var playerXspeed = 10;
+        
+        var platformXpos = 0;
+        var platformYpos = 0;
+        var platformsize = 20;
+        var platformXspeed = 10;
+        
 
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
@@ -47,7 +53,8 @@
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
             colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
-
+            colorRect(platformXpos, platformYpos, platformsize, platformXspeed, 'white');
+            
             playerMove();
         }
 
@@ -75,8 +82,14 @@
 
 
         function playerMove() {
-            playerXpos += 5;
-            playerXspeed += 5;
+            if(leftKeyPressed == true){ 
+                playerXpos -= playerXspeed
+            }
+            if(rightKeyPressed ==  true){ 
+                playerXpos += playerXspeed
+            }
+    
+            
         }
 
         function colorRect(x, y, w, h, c) {
