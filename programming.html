@@ -35,27 +35,32 @@
 
         // player vars
         var playerXpos = 0;
-        var playerYpos = 0;
+        var playerYpos = 100;
         var playersize = 20;
         var playerXspeed = 10;
+        var playerYspeed = 5;
         
-        var platformXpos = 0;
-        var platformYpos = 0;
-        var platformsize = 20;
-        var platformXspeed = 10;
+        var platformXpos = 50;
+        var platformYpos = 450;
+        var platformHeight = 20;
+        var platformWidth = 200;
+        var platformYspeed = 3;
         
-
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
         var leftKeyPressed = false;
         var rightKeyPressed = false;
+        
+        var platforms = [];
 
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
             colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
-            colorRect(platformXpos, platformYpos, platformsize, platformXspeed, 'white');
+            colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
             
             playerMove();
+            platformMove();
+            collision();
         }
 
         function keyPressed(evt) {
@@ -79,17 +84,62 @@
             }
 
         }
+        var hit = false;
+        
+        function collision(){
+            if(playerXpos + playersize > platformXpos && playerXpos < platformXpos + platformWidth && 
+              playerYpos + playersize > platformYpos && playerYpos < platformYpos + platformHeight){
+                playerYpos -= platformYspeed;
+                hit = true;
+            } else {
+                hit = false;
+            }
+        }
 
 
         function playerMove() {
-            if(leftKeyPressed == true){ 
+            if(hit == false){
+                playerYpos += playerYspeed; 
+            }
+            
+            
+            if(leftKeyPressed && playerXpos > 0){ 
                 playerXpos -= playerXspeed
             }
-            if(rightKeyPressed ==  true){ 
+            if(rightKeyPressed && playerXpos + playersize < canvas.width){ 
                 playerXpos += playerXspeed
             }
     
             
+        }
+        
+        
+//        function moveBalls(){
+//            balls.forEach(function(ball,i){
+//                ball.ballXpos += ball.ballXspeed;
+//                
+//                
+//                //right edge bounce
+//                if(ball.ballXpos + ball.ballSize > canvas.width){
+//                    ball.ballXspeed *= -1;
+//                }
+//                if(ballXpos < 0){
+//                    ball.ballXspeed *= -1;
+//                }
+//                
+//                if(ball.ballYpos > canvas.height){
+//                    ball.ballYpos = 0 - ball.ballSize;
+//                    ball.ballSize = math.floor(math.random()*(100 - 10)) + 10;
+//                     ball.ballXspeed = math.floor(math.random()*(20 - 2)) + 2;
+//                     ball.ballYspeed = math.floor(math.random()*(20 - 2)) + 2;
+//                }
+//                   
+//            })
+//                          
+//        }
+        
+        function platformMove(){
+            platformYpos -= platformYspeed
         }
 
         function colorRect(x, y, w, h, c) {
