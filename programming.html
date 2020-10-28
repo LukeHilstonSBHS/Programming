@@ -25,6 +25,9 @@
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
 
+            for (var i = 0; i < 30; i++) {
+                makePlatform();
+            }
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
 
@@ -39,56 +42,82 @@
         var playersize = 20;
         var playerXspeed = 10;
         var playerYspeed = 5;
-        
+
         var platformXpos = 50;
         var platformYpos = 450;
         var platformHeight = 20;
         var platformWidth = 200;
         var platformYspeed = 3;
-        
+
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
         var leftKeyPressed = false;
         var rightKeyPressed = false;
-        
+
         var platforms = [];
+
+        var gameRun = true;
+
+
+        var userName = ''
+
+//        while (userName == '' || userName == null) {
+//            userName == prompt('what is your name?');
+//        }
+
+        var difficulty = prompt('how hard do you want it?', '1');
+
+        difficulty = Number(difficulty) // makes a number
+        var gameSpeed = 0;
+
+        if (difficulty == 1) {
+            gameSpeed = 2
+        } else {
+            gameSpeed = 20;
+        }
+
+
 
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
-            colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
-            colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
-            
-            playerMove();
-            platformMove();
-            collision();
+            if (gameRun) {
+                colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
+                colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
+
+                playerMove();
+                platformMove();
+                collision();
+                drawPlatforms();
+                platformMove();
+            }
         }
 
         function keyPressed(evt) {
 
-            if (evt.keyCode == LEFT_KEY) { 
-                leftKeyPressed = true;  
+            if (evt.keyCode == LEFT_KEY) {
+                leftKeyPressed = true;
             }
-            if (evt.keyCode == RIGHT_KEY) { 
-                rightKeyPressed = true;  
+            if (evt.keyCode == RIGHT_KEY) {
+                rightKeyPressed = true;
             }
 
         }
-        
+
         function keyReleased(evt) {
 
-            if (evt.keyCode == LEFT_KEY) { 
-                leftKeyPressed = false;  
+            if (evt.keyCode == LEFT_KEY) {
+                leftKeyPressed = false;
             }
-            if (evt.keyCode == RIGHT_KEY) { 
-                rightKeyPressed = false;  
+            if (evt.keyCode == RIGHT_KEY) {
+                rightKeyPressed = false;
             }
 
         }
         var hit = false;
-        
-        function collision(){
-            if(playerXpos + playersize > platformXpos && playerXpos < platformXpos + platformWidth && 
-              playerYpos + playersize > platformYpos && playerYpos < platformYpos + platformHeight){
+
+        function collision() {
+            if (playerXpos + playersize > platformXpos && playerXpos < platformXpos + platformWidth &&
+                playerYpos + playersize > platformYpos && playerYpos < platformYpos + platformHeight) {
                 playerYpos -= platformYspeed;
                 hit = true;
             } else {
@@ -98,48 +127,67 @@
 
 
         function playerMove() {
-            if(hit == false){
-                playerYpos += playerYspeed; 
+            if (hit == false) {
+                playerYpos += playerYspeed;
             }
-            
-            
-            if(leftKeyPressed && playerXpos > 0){ 
+
+
+            if (leftKeyPressed &&
+                playerXpos > 0) {
                 playerXpos -= playerXspeed
             }
-            if(rightKeyPressed && playerXpos + playersize < canvas.width){ 
+            if (rightKeyPressed && playerXpos + playersize < canvas.width) {
                 playerXpos += playerXspeed
             }
-    
+
+            if (playerYpos < 0) {
+                gameRun = false;
+                playerYspeed *= -1;
+            }
+
+        } // end func
+        var platformCounter = 0;
+        var platformYlevel = 0
+
+        function makePlatform() {
+            var platformWidth = canvas.width / 8;
+            var platfromHeight = canvas.height / 20;
+            var platformYspeed = 10;
+            var platformXpos = platformCounter * platformWidth;
+
+            if (platformCounter % 8 == 0) {
+                platformYlevel++;
+            }
+            var platformYpos = canvas.height - platfromHeight * platformYlevel
+            platformCounter++;
             
+            var platform = {
+                platformXpos: platformXpos,
+                platformYpos: platformYpos,
+                platformWidth: platformWidth,
+                platfromHeight: platfromHeight,
+                platformYspeed: platformYspeed
+            }
+
+            platforms.push(platform);
         }
-        
-        
-//        function moveBalls(){
-//            balls.forEach(function(ball,i){
-//                ball.ballXpos += ball.ballXspeed;
-//                
-//                
-//                //right edge bounce
-//                if(ball.ballXpos + ball.ballSize > canvas.width){
-//                    ball.ballXspeed *= -1;
-//                }
-//                if(ballXpos < 0){
-//                    ball.ballXspeed *= -1;
-//                }
-//                
-//                if(ball.ballYpos > canvas.height){
-//                    ball.ballYpos = 0 - ball.ballSize;
-//                    ball.ballSize = math.floor(math.random()*(100 - 10)) + 10;
-//                     ball.ballXspeed = math.floor(math.random()*(20 - 2)) + 2;
-//                     ball.ballYspeed = math.floor(math.random()*(20 - 2)) + 2;
-//                }
-//                   
-//            })
-//                          
-//        }
-        
-        function platformMove(){
-            platformYpos -= platformYspeed
+
+        function drawPlatforms() {
+            platforms.forEach(function(plat, i, array) {
+                colorRect(plat.platformXpos, plat.platformYpos, plat.platformWidth, plat.platfromHeight, 'orange');
+            });
+        }
+
+        function platformMove() {
+            platforms.forEach(function(plat, i, array) {
+               
+                plat.platformYpos -= plat.platformYspeed;
+            });
+//
+//            if (platformYpos < 0) {
+//                platformYpos = canvas.height;
+//                platformXpos = Math.floor(Math.random() * (canvas.width - platformWidth))
+//            }
         }
 
         function colorRect(x, y, w, h, c) {
