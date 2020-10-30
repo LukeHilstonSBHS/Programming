@@ -80,15 +80,20 @@
 
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
-            if (gameRun) {
+            if (gameRun){
                 colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
                 colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
 
                 playerMove();
                 platformMove();
-                collision();
+                collision2();
                 drawPlatforms();
                 platformMove();
+              colorText('player',50,50,'20px Arial','red');
+            } else {
+                colorRect(0, 0, canvas.width, canvas.height, 'black');
+                colorText('gameOver',50,50,'20px Arial','red');
+                
             }
         }
 
@@ -96,6 +101,7 @@
 
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = true;
+                gameRun = false;
             }
             if (evt.keyCode == RIGHT_KEY) {
                 rightKeyPressed = true;
@@ -113,7 +119,11 @@
             }
 
         }
+        
+        var makeGaps = [];
+        var rowsCount = 0;
         var hit = false;
+        var gameRun = true;
 
         function collision() {
             if (playerXpos + playersize > platformXpos && playerXpos < platformXpos + platformWidth &&
@@ -127,13 +137,16 @@
 
 
         function playerMove() {
+          
             if (hit == false) {
                 playerYpos += playerYspeed;
+            } else {
+                playerYpos -= platSpeed;
+                playerYpos -= playerYspeed*1.2;
             }
 
 
-            if (leftKeyPressed &&
-                playerXpos > 0) {
+            if (leftKeyPressed && playerXpos > 0) {
                 playerXpos -= playerXspeed
             }
             if (rightKeyPressed && playerXpos + playersize < canvas.width) {
@@ -148,11 +161,12 @@
         } // end func
         var platformCounter = 0;
         var platformYlevel = 0
-
+        var platSpeed = 5
+        
         function makePlatform() {
             var platformWidth = canvas.width / 8;
             var platfromHeight = canvas.height / 20;
-            var platformYspeed = 10;
+            var platformYspeed = platSpeed;
             var platformXpos = platformCounter * platformWidth;
 
             if (platformCounter % 8 == 0) {
@@ -182,17 +196,39 @@
             platforms.forEach(function(plat, i, array) {
                
                 plat.platformYpos -= plat.platformYspeed;
+  
             });
+        }
+            
+        function collision2(){
+            platforms.forEach(function(plat, i, array) {
+//                console.log('closer')
+//                if(playerXpos + playersize > plat.platformXpos && playerXpos > plat.platformXpos + plat.platformWidth && playerYpos + playersize > plat.platformYpos && playerYpos < plat.platformYpos + plat.platfromHeight){
+//                   playerYpos -= plat.platformYspeed;
+//                    console.log('hit')
+//                }
+                if(playerXpos + playersize > plat.platformXpos && playerXpos < plat.platformXpos + plat.platformWidth && playerYpos + playersize > plat.platformYpos){
+                   hit = true;
+                }
+                
+                
+            });    
+        }
 //
 //            if (platformYpos < 0) {
 //                platformYpos = canvas.height;
 //                platformXpos = Math.floor(Math.random() * (canvas.width - platformWidth))
 //            }
-        }
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
+        }
+        
+        function colorText(msg, x, y, f, c){
+            canvasContext.fillStyle = c;
+            canvasContext.font = f;
+            canvasContext.fillText(msg,x,y);
         }
 
     </script>
