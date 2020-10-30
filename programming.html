@@ -25,8 +25,13 @@
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
 
-            for (var i = 0; i < 30; i++) {
+            for (var i = 0; i < 40; i++) {
                 makePlatform();
+            }
+            for(var i = 0; i < 40; i++){
+                if(i%5 == 0){
+                   delete platforms[i];
+                }
             }
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
@@ -80,7 +85,7 @@
 
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
-            if (gameRun){
+//            if (gameRun){
                 colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
                 colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
 
@@ -90,11 +95,11 @@
                 drawPlatforms();
                 platformMove();
               colorText('player',50,50,'20px Arial','red');
-            } else {
-                colorRect(0, 0, canvas.width, canvas.height, 'black');
-                colorText('gameOver',50,50,'20px Arial','red');
-                
-            }
+//            } else {
+//                colorRect(0, 0, canvas.width, canvas.height, 'black');
+//                colorText('gameOver',50,50,'20px Arial','red');
+//                
+//            }
         }
 
         function keyPressed(evt) {
@@ -159,20 +164,20 @@
             }
 
         } // end func
-        var platformCounter = 0;
+        var platformCounter = 1;
         var platformYlevel = 0
-        var platSpeed = 5
+        var platSpeed = 3;
         
         function makePlatform() {
             var platformWidth = canvas.width / 8;
             var platfromHeight = canvas.height / 20;
             var platformYspeed = platSpeed;
-            var platformXpos = platformCounter * platformWidth;
+            var platformXpos = platformCounter%8 * platformWidth;
 
             if (platformCounter % 8 == 0) {
                 platformYlevel++;
             }
-            var platformYpos = canvas.height - platfromHeight * platformYlevel
+            var platformYpos = canvas.height + (platfromHeight * 4) * platformYlevel
             platformCounter++;
             
             var platform = {
@@ -196,6 +201,10 @@
             platforms.forEach(function(plat, i, array) {
                
                 plat.platformYpos -= plat.platformYspeed;
+                
+                if(plat.platformYpos < 0){
+                   plat.platformYpos = canvas.height;
+                }
   
             });
         }
