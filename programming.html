@@ -87,7 +87,7 @@
             colorRect(0, 0, canvas.width, canvas.height, 'black');
 //            if (gameRun){
                 colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
-                colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
+            //    colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
 
                 playerMove();
                 platformMove();
@@ -101,6 +101,8 @@
 //                
 //            }
         }
+        
+    
 
         function keyPressed(evt) {
 
@@ -145,10 +147,11 @@
           
             if (hit == false) {
                 playerYpos += playerYspeed;
-            } else {
-                playerYpos -= platSpeed;
-                playerYpos -= playerYspeed*1.2;
-            }
+            } 
+//            else {
+//                playerYpos -= platSpeed;
+//                playerYpos -= playerYspeed*1.2;
+//            }
 
 
             if (leftKeyPressed && playerXpos > 0) {
@@ -204,6 +207,13 @@
                 
                 if(plat.platformYpos < 0){
                    plat.platformYpos = canvas.height;
+                }
+                
+                if(playerXpos + playersize > plat.platformXpos && playerXpos < plat.platformXpos + plat.platformWidth && playerYpos + playersize > plat.platformYpos && playerYpos < plat.platformYpos + plat.platfromHeight){
+                    playerYpos -= plat.platformYspeed*2;
+                    hit = true;
+                } else {
+                    hit = false;
                 }
   
             });
