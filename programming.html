@@ -36,7 +36,8 @@
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
 
-            setInterval(mainloop, 1000 / 50);
+            setInterval(mainloop, 60 / gameSpeed);
+            
         }
 
 
@@ -70,16 +71,52 @@
 //            userName == prompt('what is your name?');
 //        }
 
-        var difficulty = prompt('how hard do you want it?', '1');
+        var difficulty = prompt('Set speed 1-5, lower = faster');
 
-        difficulty = Number(difficulty) // makes a number
-        var gameSpeed = 0;
+ 
 
-        if (difficulty == 1) {
-            gameSpeed = 2
-        } else {
-            gameSpeed = 20;
+        // make sure response is 1-5
+        
+        while(isNaN(difficulty) || difficulty > 5 || difficulty < 1){
+            difficulty = prompt('Set speed 1-5, lower = faster');
         }
+        
+        // difficulty confirmation responses
+        
+        if (difficulty == 1) {
+            gameSpeed = 1
+            alert("Difficulty : Baby")
+        } 
+        if (difficulty == 2) {
+            gameSpeed = 2
+            alert("Difficulty : Easy")
+        }
+        if (difficulty == 3) {
+            gameSpeed = 3
+            alert("Difficulty : Medium")
+        }
+        if (difficulty == 4) {
+            gameSpeed = 4
+            alert("Difficulty : Hard")
+        }
+        if (difficulty == 5) {
+            gameSpeed = 5
+            alert("Difficulty : Extreme")
+        }
+        
+        
+        
+        
+       // var difficulty = prompt('how hard do you want it?', '1');
+
+        //difficulty = Number(difficulty) // makes a number
+        //var gameSpeed = 0;
+
+        //if (difficulty == 1) {
+          //  gameSpeed = 2
+        //} else {
+            //gameSpeed = 20;
+        //}
 
 
 
