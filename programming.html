@@ -70,7 +70,19 @@
 //        while (userName == '' || userName == null) {
 //            userName == prompt('what is your name?');
 //        }
+        
+        function gameOver(){
+            if(aiScore > 5){
+                gameRun = false;
+            }
+        }
 
+        var userName = '';
+        
+        while (userName == '' || userName == null) {
+            userName = prompt('what is your name?')
+        }
+        
         var difficulty = prompt('Set speed 1-5, lower = faster');
 
  
@@ -105,19 +117,6 @@
         }
         
         
-        
-        
-       // var difficulty = prompt('how hard do you want it?', '1');
-
-        //difficulty = Number(difficulty) // makes a number
-        //var gameSpeed = 0;
-
-        //if (difficulty == 1) {
-          //  gameSpeed = 2
-        //} else {
-            //gameSpeed = 20;
-        //}
-
 
 
         function mainloop() {
@@ -126,12 +125,14 @@
                 colorRect(playerXpos, playerYpos, playersize, playersize, 'red');
             //    colorRect(platformXpos, platformYpos, platformWidth, platformHeight, 'white');
 
+                drawText(canvas.width - 120, 20, 'white', userName  , '100px Arial'); //player score display
+             
+            
                 playerMove();
                 platformMove();
                 collision2();
                 drawPlatforms();
                 platformMove();
-              colorText('player',50,50,'20px Arial','red');
 //            } else {
 //                colorRect(0, 0, canvas.width, canvas.height, 'black');
 //                colorText('gameOver',50,50,'20px Arial','red');
@@ -235,6 +236,11 @@
             platforms.forEach(function(plat, i, array) {
                 colorRect(plat.platformXpos, plat.platformYpos, plat.platformWidth, plat.platfromHeight, 'orange');
             });
+        }
+        
+        function drawText(x, y, color, msg, sizeStyle) {
+            canvasContext.fillStyle = color;
+            canvasContext.fillText(msg, x, y);
         }
 
         function platformMove() {
